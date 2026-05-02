@@ -15,6 +15,7 @@ public class Todo {
 
     private String title;
     private boolean completed = false;
+    private java.time.LocalDate dueDate;
 
     @CreationTimestamp
     private java.time.LocalDateTime createdAt;
