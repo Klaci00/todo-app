@@ -19,4 +19,9 @@ public class Todo {
 
     @CreationTimestamp
     private java.time.LocalDateTime createdAt;
+
+    @Transient
+    public boolean isOverdue() {
+        return !completed && dueDate != null && dueDate.isBefore(java.time.LocalDate.now());
+    }
 }

@@ -19,6 +19,7 @@
             <th>Task</th>
             <th>Added</th>
             <th>Due Date</th>
+            <th>Overdue</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -31,6 +32,7 @@
             </td>
             <td th:text="${#temporals.format(todo.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${#temporals.format(todo.dueDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${todo.overdue} ? 'Yes' : 'No'"></td>
             <td>
                 <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="display:inline">
                     <button type="submit" th:text="${todo.completed} ? 'Undo' : 'Done'"></button>
