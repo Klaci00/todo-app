@@ -3,46 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Todo App</title>
+    <!-- Linking the CSS file -->
+    <link rel="stylesheet" th:href="@{css/style.css}">
 </head>
 <body>
     <h1>Todo App</h1>
 
-    <form th:action="@{/add}" method="post">
-        <input type="text" name="title" placeholder="New task..." required />
-        <input type="date" name="dueDate" required />
-        <button type="submit">Add</button>
-    </form>
+    <div class="form-container">
+        <form th:action="@{/add}" method="post">
+            <input type="text" name="title" placeholder="What needs to be done?" required />
+            <input type="date" name="dueDate" required />
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>Task</th>
-            <th>Added</th>
-            <th>Due Date</th>
-            <th>Overdue</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="todo : ${todos}">
-            <td>
-                <span th:text="${todo.title}"
-                      th:style="${todo.completed} ? 'text-decoration:line-through' : ''">
-                </span>
-            </td>
-            <td th:text="${#temporals.format(todo.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${#temporals.format(todo.dueDate, 'yyyy-MM-dd')}"></td>
-            <td th:text="${todo.overdue} ? 'Yes' : 'No'"></td>
-            <td>
-                <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="display:inline">
-                    <button type="submit" th:text="${todo.completed} ? 'Undo' : 'Done'"></button>
-                </form>
-                <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" style="display:inline">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Added</th>
+                <th>Due Date</th>
+                <th>Overdue</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="todo : ${todos}">
+                <td>
+                    <span th:text="${todo.title}"
+                          th:classappend="${todo.completed} ? 'completed-text' : ''">
+                    </span>
+                </td>
+                <td th:text="${#temporals.format(todo.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(todo.dueDate, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <span th:text="${todo.overdue} ? 'Yes' : 'No'"
+                          th:classappend="${todo.overdue} ? 'overdue-yes' : ''"></span>
+                </td>
+                <td>
+                    <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="display:inline; box-shadow:none; padding:0; background:none;">
+                        <button type="submit" class="btn-toggle" th:text="${todo.completed} ? 'Undo' : 'Done'"></button>
+                    </form>
+                    <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" style="display:inline; box-shadow:none; padding:0; background:none;">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
