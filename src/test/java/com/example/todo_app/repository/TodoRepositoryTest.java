@@ -20,13 +20,14 @@ class TodoRepositoryTest {
     void shouldSaveAndFindTodo() {
         Todo todo = new Todo();
         todo.setTitle("Buy groceries");
-
+        todo.setDueDate(java.time.LocalDate.of(2027, 12, 31));
         todoRepository.save(todo);
         List<Todo> todos = todoRepository.findAll();
 
         assertEquals(1, todos.size());
         assertEquals("Buy groceries", todos.get(0).getTitle());
         assertFalse(todos.get(0).isCompleted());
+        assertEquals(java.time.LocalDate.of(2027, 12, 31), todos.get(0).getDueDate());
     }
 
     @Test
@@ -40,5 +41,16 @@ class TodoRepositoryTest {
         Optional<Todo> result = todoRepository.findById(id);
 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void savedTodo_shouldHaveCreatedAtSetAutomatically() {
+        Todo todo = new Todo();
+        todo.setTitle("Timestamped task");
+        todo.setDueDate(java.time.LocalDate.of(2027, 12, 31));
+        todoRepository.save(todo);
+
+        Todo found = todoRepository.findAll().get(0);
+        assertNotNull(found.getCreatedAt());
     }
 }

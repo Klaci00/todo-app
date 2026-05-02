@@ -28,11 +28,12 @@ class TodoServiceTest {
         Todo expectedTodo = new Todo();
         expectedTodo.setTitle("Buy milk");
         expectedTodo.setCompleted(false);
+        expectedTodo.setDueDate(java.time.LocalDate.of(2007, 12, 31));
         
-        todoService.add("Buy milk");
+        todoService.add("Buy milk", java.time.LocalDate.of(2007, 12, 31));
 
         verify(todoRepository, times(1)).save(argThat(t ->
-            t != null && t.getTitle().equals("Buy milk") && !t.isCompleted()
+            t != null && t.getTitle().equals("Buy milk") && !t.isCompleted() && t.getDueDate().equals(expectedTodo.getDueDate())
         ));
     }
 
@@ -74,5 +75,20 @@ class TodoServiceTest {
         todoService.delete(1L);
 
         verify(todoRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void add_shouldSetOverdueFlag() {
+        Todo expectedTodo = new Todo();
+        expectedTodo.setTitle("Buy milk");
+        expectedTodo.setCompleted(false);
+        expectedTodo.setDueDate(java.time.LocalDate.of(2007, 12, 31));
+        
+
+        todoService.add("Buy milk", java.time.LocalDate.of(2007, 12, 31));
+
+        verify(todoRepository, times(1)).save(argThat(t ->
+            t != null && t.getTitle().equals("Buy milk") && !t.isCompleted() && t.getDueDate().equals(expectedTodo.getDueDate()) && t.isOverdue()
+        ));
     }
 }

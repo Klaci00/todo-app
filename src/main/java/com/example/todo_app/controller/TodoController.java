@@ -22,8 +22,8 @@ public class TodoController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam String title) {
-        todoService.add(title);
+    public String add(@RequestParam String title, @RequestParam java.time.LocalDate dueDate) {
+        todoService.add(title, dueDate);
         return "redirect:/";
     }
 

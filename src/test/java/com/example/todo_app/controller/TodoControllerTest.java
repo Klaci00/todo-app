@@ -24,7 +24,7 @@ class TodoControllerTest {
     private TodoService todoService;
 
     @Test
-    void index_shouldReturnIndexViewWithTodos() throws Exception {
+    void index_shouldReturnIndexViewWithTodosInTable() throws Exception {
         Todo todo = new Todo();
         todo.setTitle("Test task");
         when(todoService.findAll()).thenReturn(List.of(todo));
@@ -32,16 +32,21 @@ class TodoControllerTest {
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(view().name("index"))
-            .andExpect(model().attributeExists("todos"));
+            .andExpect(model().attributeExists("todos"))
+            .andExpect(model().attribute("todos", List.of(todo)))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("<td>")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Test task")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("<form")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Due Date")));
     }
 
     @Test
     void add_shouldCallServiceAndRedirect() throws Exception {
-        mockMvc.perform(post("/add").param("title", "New task"))
+        mockMvc.perform(post("/add").param("title", "New task").param("dueDate", java.time.LocalDate.of(2027, 12, 31).toString()))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"));
 
-        verify(todoService, times(1)).add("New task");
+        verify(todoService, times(1)).add("New task", java.time.LocalDate.of(2027, 12, 31));
     }
 
     @Test

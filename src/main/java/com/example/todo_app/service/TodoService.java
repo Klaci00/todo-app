@@ -19,9 +19,10 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public void add(String title) {
+    public void add(String title,java.time.LocalDate dueDate) {
         Todo todo = new Todo();
         todo.setTitle(title);
+        todo.setDueDate(dueDate);
         todoRepository.save(todo);
     }
 
