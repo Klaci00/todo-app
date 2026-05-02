@@ -12,20 +12,32 @@
         <button type="submit">Add</button>
     </form>
 
-    <ul>
-        <li th:each="todo : ${todos}">
-            <span th:text="${todo.title}"
-                  th:style="${todo.completed} ? 'text-decoration:line-through' : ''">
-            </span>
-
-            <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="display:inline">
-                <button type="submit" th:text="${todo.completed} ? 'Undo' : 'Done'"></button>
-            </form>
-
-            <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" style="display:inline">
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-    </ul>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Added</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="todo : ${todos}">
+            <td>
+                <span th:text="${todo.title}"
+                      th:style="${todo.completed} ? 'text-decoration:line-through' : ''">
+                </span>
+            </td>
+            <td th:text="${#temporals.format(todo.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="display:inline">
+                    <button type="submit" th:text="${todo.completed} ? 'Undo' : 'Done'"></button>
+                </form>
+                <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" style="display:inline">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -41,4 +41,14 @@ class TodoRepositoryTest {
 
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    void savedTodo_shouldHaveCreatedAtSetAutomatically() {
+        Todo todo = new Todo();
+        todo.setTitle("Timestamped task");
+        todoRepository.save(todo);
+
+        Todo found = todoRepository.findAll().get(0);
+        assertNotNull(found.getCreatedAt());
+    }
 }

@@ -24,7 +24,7 @@ class TodoControllerTest {
     private TodoService todoService;
 
     @Test
-    void index_shouldReturnIndexViewWithTodos() throws Exception {
+    void index_shouldReturnIndexViewWithTodosInTable() throws Exception {
         Todo todo = new Todo();
         todo.setTitle("Test task");
         when(todoService.findAll()).thenReturn(List.of(todo));
@@ -32,7 +32,10 @@ class TodoControllerTest {
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(view().name("index"))
-            .andExpect(model().attributeExists("todos"));
+            .andExpect(model().attributeExists("todos"))
+            .andExpect(model().attribute("todos", List.of(todo)))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("<td>")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Test task")));
     }
 
     @Test

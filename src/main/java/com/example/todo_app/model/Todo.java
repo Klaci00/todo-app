@@ -1,5 +1,7 @@
 package com.example.todo_app.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,4 +15,7 @@ public class Todo {
 
     private String title;
     private boolean completed = false;
+
+    @CreationTimestamp
+    private java.time.LocalDateTime createdAt;
 }
